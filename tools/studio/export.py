@@ -1,6 +1,7 @@
 """Step 4: write the passed logos into the library: logos/<anilistId>.webp (lossless, alpha) and index.json.
 
-Only picks whose verdict in review.json is "pass" are exported. Usage: export.py [--date YYYY-MM-DD]
+Only picks whose verdict in review.json is "pass" are exported. Usage: export.py [--date YYYY-MM-DD] [--only id,id]
+With --only, just those logos are encoded again; every other entry is kept as it is when its file still matches.
 """
 import hashlib
 import json
@@ -32,6 +33,7 @@ def source_note(aid, key, meta):
 
 def main(argv):
     today = argv[argv.index('--date') + 1] if '--date' in argv else date.today().isoformat()
+    only = set(argv[argv.index('--only') + 1].split(',')) if '--only' in argv else None
     picks = json.loads((ROOT / 'picks.json').read_text())
     verdicts = json.loads((ROOT / 'review.json').read_text())
     meta = json.loads((ROOT / 'sources' / 'anilist.json').read_text())
@@ -46,12 +48,15 @@ def main(argv):
         if cut['key'] != verdict.get('key') or look_key(pick) != verdict.get('look'):
             print(aid, 'skipped: the verdict is for an older cut or look', file=sys.stderr)
             continue
-        img = Image.fromarray(S.finish(pick, np.asarray(Image.open(ROOT / 'work' / 'cut' / aid / 'logo.png').convert('RGBA'))))
         dest = LIB / 'logos' / f'{aid}.webp'
+        prev = old.get(aid, {})
+        if only is not None and aid not in only and dest.exists() and hashlib.sha256(dest.read_bytes()).hexdigest() == prev.get('sha256'):
+            index[aid] = prev  # unchanged: encoding all of them again takes minutes for the same bytes
+            continue
+        img = Image.fromarray(S.finish(pick, np.asarray(Image.open(ROOT / 'work' / 'cut' / aid / 'logo.png').convert('RGBA'))))
         img.save(dest, 'WEBP', lossless=True, quality=100, method=6)
         data = dest.read_bytes()
         sha = hashlib.sha256(data).hexdigest()
-        prev = old.get(aid, {})
         index[aid] = {'file': f'logos/{aid}.webp', 'sha256': sha, 'w': img.width, 'h': img.height,
                       'lang': pick['lang'], 'script': pick['script'], 'source': pick.get('source', 'cover'),
                       'from': pick.get('from') or source_note(aid, pick['src'], meta),

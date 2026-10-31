@@ -27,7 +27,7 @@ sheets need Noto Sans CJK on the host, `fonts-noto-cjk`, which `sheet.sh` mounts
 | 2 | `sheets.py pick` / `boxes` / `zooms` | Contact sheets: every candidate cover, the chosen cover with its numbered boxes and a 10% grid. A person picks the source and the boxes into `picks.json`. |
 | 3 | `cut.py` | Crop with a margin, upscale small crops with Real-ESRGAN (anime 6B), soft alpha, keep what lies in the chosen boxes, erase/restore polygons, foreground colour estimation, trim, cap at 1600 px. |
 | 4 | `sheets.py hero` / `fix`, `verdict.py` | Logos in the app's hero conditions (640x260 box, black wash, its drop shadows) with automatic warnings for cut edges, haze, strays and dark lettering, plus the source crop with a grid and the kept alpha over it; a person passes or fails each. |
-| 5 | `export.py` | Passed logos, with the haze cleanup and any light version, to `logos/<id>.webp` (lossless) and `index.json`. |
+| 5 | `export.py` | Passed logos, with the haze cleanup and any light version, to `logos/<id>.webp` (lossless) and `index.json`; `--only <ids>` encodes just those again. |
 
 ## Soft alpha, three ways
 
@@ -73,7 +73,9 @@ More fields, for the strokes a model leaves out and the art it keeps:
 - `erase_lum`: `[{"poly": [...], "max": 0.3}]` fades out what is this dark (or `"min"`: this light) inside a
   polygon, for background showing through a letter.
 - `solid`: alpha 1 after matting; `{"poly": [...], "from": [x, y]}` rebuilds a stroke the cover hides, in the
-  colour at `from`.
+  colour at `from`; `{"poly": [...], "fit": [x0, y0, x1, y1], "fit_sat": 0.15, "feather": 0.7, "rim": [4, 22]}`
+  rebuilds it in a gradient fitted to the clean letters in the `fit` box, with a crisp edge and the letters' light
+  bevel, so it shades like its neighbours.
 - `min_part`: drops specks lighter than this share of the logo.
 - `light` (export only): the light version of a dark logo; `{"region": [...]}` in fractions of the logo limits it
   to one line, `below`, `chroma` and `rims` tune it (see `studio.lighten`). `clean: false` skips the haze cleanup.

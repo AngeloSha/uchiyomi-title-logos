@@ -672,7 +672,7 @@
  },
  "146712": {
   "file": "logos/146712.webp",
-  "sha256": "9ff7d847da0f2a7147c46583172839c676b7fd6f66718093cf06fea89109e9fe",
+  "sha256": "e36bd0586700554dd91064c6996ecfc0583548fe696a66f04a53d4ffc1b8e7d4",
   "w": 1439,
   "h": 764,
   "lang": "en",
@@ -892,9 +892,9 @@
  },
  "154973": {
   "file": "logos/154973.webp",
-  "sha256": "da8a91ec881adcff35ad65e970e069c9929bc7dd137efedbda818b04418ee384",
+  "sha256": "670ed84a45aad4d56f1acfabbafa784ef3a41f019f9008af2e414c0f3ab0817c",
   "w": 1183,
-  "h": 709,
+  "h": 710,
   "lang": "ko",
   "script": "Hang",
   "source": "cover",

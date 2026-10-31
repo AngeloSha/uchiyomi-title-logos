@@ -24,7 +24,9 @@ A pick (coordinates are fractions of the source cover):
                                                           "grey": 0.2 limits it to colours less saturated than that,
                                                           "sat": 0.35 to colours more saturated than that,
                                                           "hue": [270, 350] to those hues)
-  "solid" also takes {"poly": [...], "from": [x, y]}: a stroke the cover hides, rebuilt in the colour at `from`.
+  "solid" also takes {"poly": [...], "from": [x, y]} or {"poly": [...], "fit": [x0, y0, x1, y1], "fit_sat": 0.15,
+  "feather": 0.7, "rim": [4, 22]}: a stroke the cover hides, rebuilt in the colour at `from` or in a gradient fitted
+  to the clean letters in the `fit` box, with a soft edge and the letters' light bevel.
   "restore" widens what counts as inside without making it unknown; "include" makes a polygon unknown (ViTMatte
   decides it whole); "solid_fg" forces sure logo into the trimap; "solid" sets alpha 1 after matting.
 
@@ -236,11 +238,37 @@ def cut(aid, pick):
     solids = pick.get('solid') or []
     paint = up.copy() if any(isinstance(sp, dict) for sp in solids) else up
     for sp in solids:
-        m = poly_mask([sp['poly'] if isinstance(sp, dict) else sp], alpha.shape, to_px)
-        alpha[m] = 1
-        if isinstance(sp, dict):  # a stroke the cover hides or breaks, rebuilt in the logo's colour sampled at `from`
+        if not isinstance(sp, dict):
+            alpha[poly_mask([sp], alpha.shape, to_px)] = 1
+            continue
+        # A stroke the cover hides or breaks, rebuilt: alpha 1 inside the polygon, a soft edge of `feather` px like
+        # the letters' own, and the logo's colour: sampled at `from`, or a gradient fitted (colour = a + b x + c y)
+        # to the clean letter pixels in the `fit` box (alpha 1, saturation under `fit_sat`), so it shades like them.
+        m = poly_mask([sp['poly']], alpha.shape, to_px)
+        soft = cv2.GaussianBlur(m.astype(np.float32), (0, 0), sp['feather']) if sp.get('feather') else m.astype(np.float32)
+        zone = m | ((soft > 0.01) & (alpha < 0.5))
+        if 'fit' in sp:
+            fx0, fy0 = to_px(*sp['fit'][:2])
+            fx1, fy1 = to_px(*sp['fit'][2:])
+            box = np.zeros(alpha.shape, bool)
+            box[max(0, int(fy0)):int(fy1), max(0, int(fx0)):int(fx1)] = True
+            mx = up.max(axis=2).astype(np.float32)
+            sat = (mx - up.min(axis=2)) / np.maximum(mx, 1)
+            ys, xs = np.nonzero(box & ~m & (alpha >= 0.98) & (sat < sp.get('fit_sat', 1.0)))
+            pick_n = np.linspace(0, len(xs) - 1, min(len(xs), 20000)).astype(int)
+            A = np.stack([np.ones(len(pick_n)), xs[pick_n], ys[pick_n]], 1).astype(np.float64)
+            coef = np.linalg.lstsq(A, up[ys[pick_n], xs[pick_n]].astype(np.float64), rcond=None)[0]
+            zy, zx = np.nonzero(zone)
+            paint[zy, zx] = np.clip(np.stack([np.ones(len(zx)), zx, zy], 1) @ coef, 0, 255).round().astype(np.uint8)
+        else:
             px_, py_ = to_px(*sp['from'])
-            paint[m] = up[min(uh - 1, max(0, int(py_))), min(uw - 1, max(0, int(px_)))]
+            paint[zone] = up[min(uh - 1, max(0, int(py_))), min(uw - 1, max(0, int(px_)))]
+        alpha = np.maximum(alpha, soft)
+        if sp.get('rim'):  # the letters' light bevel: up to `gain` brighter within `width` px of the edge
+            width, gain = sp['rim']
+            d = cv2.distanceTransform((alpha >= 0.5).astype(np.uint8), cv2.DIST_L2, 3)
+            lift = np.clip(1 - d / width, 0, 1) * gain
+            paint[zone] = np.clip(paint[zone].astype(np.float32) + lift[zone][:, None], 0, 255).round().astype(np.uint8)
 
     fgc = S.estimate_foreground(paint, alpha)
     (OUT / aid).mkdir(parents=True, exist_ok=True)
