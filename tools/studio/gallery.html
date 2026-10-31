@@ -1,0 +1,290 @@
+<title>Uchiyomi Title Logos</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=IBM+Plex+Mono:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+/* Layout: a contact sheet of hero previews, one per series, on the dark ink of a reading room at night.
+   One committed dark look: the logos are judged where they will live, on a darkened hero. */
+:root {
+  --ink: #0d0f14;          /* page */
+  --sheet: #151821;        /* card ground */
+  --rule: #262b38;         /* hairlines */
+  --paper: #ece8df;        /* text */
+  --dim: #9097a6;          /* secondary text */
+  --tide: #7cc7bb;         /* focus, links, chosen chips */
+  --flag: #f2a93b;         /* a logo marked for redo */
+  --font-display: "Dela Gothic One", "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif;
+  --font-body: "Zen Kaku Gothic New", "Hiragino Sans", "Noto Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--ink); color: var(--paper); font: 15px/1.55 var(--font-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 64px;
+}
+.wrap { max-width: 1440px; margin: 0 auto; display: grid; gap: 28px; }
+header { display: grid; gap: 14px; }
+h1 { font: 400 clamp(26px, 4vw, 40px)/1.1 var(--font-display); margin: 0; letter-spacing: .01em; text-wrap: balance; }
+h1 small { display: block; font: 500 12px/1.4 var(--font-mono); color: var(--dim); letter-spacing: .14em; text-transform: uppercase; margin-bottom: 8px; }
+.lede { margin: 0; max-width: 68ch; color: var(--paper); }
+.lede b { color: var(--flag); font-weight: 700; }
+.status { margin: 0; font: 13px/1.5 var(--font-mono); color: var(--dim); min-height: 1.5em; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; }
+.group { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.group > span { font: 500 11px/1 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--dim); margin-right: 4px; }
+.chip {
+  font: 500 13px/1 var(--font-body); color: var(--paper); background: transparent; border: 1px solid var(--rule);
+  border-radius: 999px; padding: 8px 12px; cursor: pointer; font-variant-numeric: tabular-nums;
+}
+.chip:hover { border-color: var(--dim); }
+.chip[aria-pressed="true"] { border-color: var(--tide); color: var(--tide); }
+.chip.flagged[aria-pressed="true"] { border-color: var(--flag); color: var(--flag); }
+.chip:focus-visible, .redo:focus-visible, .note input:focus-visible, .search:focus-visible, .logo-btn:focus-visible { outline: 2px solid var(--tide); outline-offset: 2px; }
+.search {
+  font: 14px/1 var(--font-body); color: var(--paper); background: var(--sheet); border: 1px solid var(--rule);
+  border-radius: 8px; padding: 9px 12px; width: min(260px, 100%);
+}
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 22px 18px; }
+.card { display: grid; gap: 10px; align-content: start; min-width: 0; }
+.card[hidden] { display: none; }
+.hero {
+  position: relative; aspect-ratio: 16 / 7; max-width: 100%; border-radius: 6px; overflow: hidden;
+  background: #0a0b0f var(--bg) center / cover no-repeat;
+}
+.hero::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, #07080bd9 0%, #07080b9e 48%, #07080b59 100%); }
+.mode-dark .hero { background: #0e1015; }
+.mode-light .hero { background: #eeede6; }
+.mode-dark .hero::before, .mode-light .hero::before { display: none; }
+.logo-btn { position: absolute; inset: 0; display: flex; align-items: center; padding: 0 7%; background: none; border: 0; cursor: zoom-in; }
+.logo {
+  display: block; max-width: 74%; max-height: 66%; width: auto; height: auto; object-fit: contain;
+  filter: drop-shadow(0 2px 2px #ffffff47) drop-shadow(0 4px 12px #000000d9);
+}
+.mode-light .logo, .mode-dark .logo { filter: none; }
+.card.marked .hero { box-shadow: 0 0 0 2px var(--flag); }
+.info { display: flex; gap: 12px; align-items: start; justify-content: space-between; min-width: 0; }
+.info h3 { margin: 0; font: 700 15px/1.35 var(--font-body); text-wrap: balance; overflow-wrap: anywhere; }
+.aka { margin: 2px 0 0; font-size: 13px; color: var(--paper); opacity: .8; overflow-wrap: anywhere; }
+.meta { margin: 2px 0 0; font: 12px/1.4 var(--font-mono); color: var(--dim); }
+.redo {
+  flex: none; font: 500 13px/1 var(--font-body); color: var(--paper); background: transparent;
+  border: 1px solid var(--rule); border-radius: 6px; padding: 8px 12px; cursor: pointer;
+}
+.redo:hover { border-color: var(--flag); }
+.redo[aria-pressed="true"] { background: var(--flag); border-color: var(--flag); color: #1b1407; }
+.redo:disabled { opacity: .45; cursor: not-allowed; }
+.note input {
+  width: 100%; font: 14px/1.3 var(--font-body); color: var(--paper); background: var(--sheet);
+  border: 1px solid var(--flag); border-radius: 6px; padding: 9px 10px;
+}
+.missing { display: grid; gap: 12px; border-top: 1px solid var(--rule); padding-top: 24px; }
+.missing h2 { margin: 0; font: 400 22px/1.2 var(--font-display); }
+.missing p { margin: 0; max-width: 68ch; color: var(--dim); }
+.missing ul { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); gap: 8px 24px; }
+.missing li { min-width: 0; display: grid; gap: 2px; padding: 8px 0; border-bottom: 1px solid var(--rule); }
+.missing li b { font-weight: 700; overflow-wrap: anywhere; }
+.missing li span { color: var(--dim); font-size: 14px; }
+.unlinked { columns: 18rem; column-gap: 24px; margin: 0; padding: 0; list-style: none; color: var(--dim); font-size: 14px; }
+.unlinked li { break-inside: avoid; padding: 2px 0; }
+dialog { border: 1px solid var(--rule); border-radius: 10px; padding: 0; background: var(--sheet); color: var(--paper); max-width: min(1100px, calc(100vw - 32px)); width: 100%; }
+dialog::backdrop { background: #000000b3; }
+.zoom-head { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--rule); }
+.zoom-head b { font: 700 15px/1.3 var(--font-body); overflow-wrap: anywhere; }
+.zoom-body { display: grid; gap: 0; }
+.zoom-body div { padding: 22px; display: flex; justify-content: center; }
+.zoom-body img { max-height: 46vh; }
+.checker { background: repeating-conic-gradient(#3a3f4c 0 25%, #2a2e38 0 50%) 0 0 / 18px 18px; }
+.solid-dark { background: #0e1015; }
+.solid-light { background: #eeede6; }
+@media (prefers-reduced-motion: no-preference) { .chip, .redo { transition: border-color .15s, background-color .15s, color .15s; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1><small>For your check before it goes public</small>Uchiyomi Title Logos</h1>
+    <p class="lede" id="lede"></p>
+    <p class="status" id="status" role="status"></p>
+    <div class="toolbar">
+      <div class="group" id="filters"><span>Show</span></div>
+      <div class="group" id="modes"><span>Behind</span></div>
+      <input class="search" id="search" type="search" placeholder="Find a series" aria-label="Find a series">
+    </div>
+  </header>
+  <main class="grid" id="grid"></main>
+  <section class="missing" id="missing"></section>
+</div>
+
+<dialog id="zoom" aria-label="Logo at full size">
+  <div class="zoom-head"><b id="zoom-title"></b><button class="chip" id="zoom-close" type="button">Close</button></div>
+  <div class="zoom-body">
+    <div class="checker"><img id="zoom-a" alt=""></div>
+    <div class="solid-dark"><img id="zoom-b" alt=""></div>
+    <div class="solid-light"><img id="zoom-c" alt=""></div>
+  </div>
+</dialog>
+
+<script type="application/json" id="data">__DATA__</script>
+<script>
+(() => {
+  const DATA = JSON.parse(document.getElementById('data').textContent);
+  const $ = (id) => document.getElementById(id);
+  const grid = $('grid');
+  const state = { filter: 'all', mode: 'banner', query: '' };
+  let marks = {};          // anilistId -> { redo: true, note }
+  let db = null;
+  const cards = new Map();
+
+  const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+  $('lede').innerHTML = `${plural(DATA.logos.length, 'logo', 'logos')}, one per series, each cut from a cover (or taken from an official logo file) and checked by eye. Press <b>Redo</b> on any that looks wrong and say what in the note. Click a logo to see it at full size. The library goes public only after you OK this page.`;
+
+  function setStatus(text) { $('status').textContent = text; }
+
+  // ---- cards
+  for (const item of DATA.logos) {
+    const card = document.createElement('article');
+    card.className = 'card';
+    card.dataset.id = item.id;
+    card.innerHTML = `
+      <div class="hero" style="--bg:url('bg/${item.id}.jpg')">
+        <button class="logo-btn" type="button" aria-label="See ${item.title.replace(/"/g, '&quot;')} at full size">
+          <img class="logo" src="logos/${item.id}.webp" width="${item.w}" height="${item.h}" loading="lazy" decoding="async" alt="">
+        </button>
+      </div>
+      <div class="info">
+        <div><h3></h3><p class="aka" hidden></p><p class="meta"></p></div>
+        <button class="redo" type="button" aria-pressed="false" disabled>Redo</button>
+      </div>
+      <div class="note" hidden><input type="text" id="note-${item.id}" maxlength="300" placeholder="What's wrong? (optional)" aria-label="What's wrong with this logo"></div>`;
+    card.querySelector('h3').textContent = item.title;
+    if (item.aka) { const a = card.querySelector('.aka'); a.hidden = false; a.textContent = `AniList title: ${item.aka}`; }
+    card.querySelector('.meta').textContent = `AniList ${item.id} · ${DATA.langs[item.lang] || item.lang} · ${item.script}${item.source === 'official' ? ' · official file' : ''}`;
+    card.querySelector('.logo-btn').addEventListener('click', () => openZoom(item));
+    card.querySelector('.redo').addEventListener('click', () => toggle(item.id));
+    const input = card.querySelector('.note input');
+    let timer = 0;
+    input.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(() => saveNote(item.id, input.value), 700); });
+    input.addEventListener('change', () => { clearTimeout(timer); saveNote(item.id, input.value); });
+    grid.append(card);
+    cards.set(item.id, { card, item, input });
+  }
+
+  // ---- filters and background modes
+  const langs = [...new Set(DATA.logos.map((l) => l.lang))];
+  const filters = [['all', 'All'], ['redo', 'Marked redo'], ...langs.map((l) => [l, DATA.langs[l] || l])];
+  for (const [key, label] of filters) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'chip' + (key === 'redo' ? ' flagged' : ''); b.dataset.key = key;
+    b.setAttribute('aria-pressed', String(key === state.filter));
+    b.addEventListener('click', () => { state.filter = key; refresh(); });
+    $('filters').append(b);
+  }
+  for (const [key, label] of [['banner', 'Banner'], ['dark', 'Dark'], ['light', 'Light']]) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'chip'; b.dataset.mode = key; b.textContent = label;
+    b.setAttribute('aria-pressed', String(key === state.mode));
+    b.addEventListener('click', () => { state.mode = key; refresh(); });
+    $('modes').append(b);
+  }
+  $('search').addEventListener('input', (e) => { state.query = e.target.value.trim().toLowerCase(); refresh(); });
+
+  function refresh() {
+    const count = { all: DATA.logos.length, redo: Object.keys(marks).length };
+    for (const l of langs) count[l] = DATA.logos.filter((x) => x.lang === l).length;
+    for (const b of $('filters').querySelectorAll('.chip')) {
+      const label = filters.find(([k]) => k === b.dataset.key)[1];
+      b.textContent = `${label} ${count[b.dataset.key] ?? 0}`;
+      b.setAttribute('aria-pressed', String(b.dataset.key === state.filter));
+    }
+    for (const b of $('modes').querySelectorAll('.chip')) b.setAttribute('aria-pressed', String(b.dataset.mode === state.mode));
+    grid.className = `grid mode-${state.mode}`;
+    for (const { card, item, input } of cards.values()) {
+      const mark = marks[item.id];
+      const show = (state.filter === 'all' || (state.filter === 'redo' ? !!mark : item.lang === state.filter))
+        && (!state.query || (item.title + ' ' + item.aka).toLowerCase().includes(state.query));
+      card.hidden = !show;
+      card.classList.toggle('marked', !!mark);
+      const btn = card.querySelector('.redo');
+      btn.setAttribute('aria-pressed', String(!!mark));
+      btn.textContent = mark ? 'Marked' : 'Redo';
+      btn.disabled = !db;
+      card.querySelector('.note').hidden = !mark;
+      if (mark && document.activeElement !== input) input.value = mark.note || '';
+    }
+  }
+
+  // ---- marks, kept in the page's database so Claude can read them
+  async function toggle(id) {
+    if (!db) return;
+    const was = marks[id];
+    if (was) delete marks[id]; else marks[id] = { redo: true, note: '' };
+    refresh();
+    try {
+      if (was) await db.doc(`marks/${id}`).delete();
+      else await db.doc(`marks/${id}`).set({ redo: true, note: '', at: new Date().toISOString() });
+      setStatus(was ? 'Mark removed.' : 'Marked for redo. Add a note if you like; it saves as you type.');
+    } catch (e) {
+      if (was) marks[id] = was; else delete marks[id];
+      refresh();
+      setStatus(`That mark was not saved (${e && e.code ? e.code : 'error'}). Try again in a moment.`);
+    }
+  }
+  async function saveNote(id, note) {
+    if (!db || !marks[id] || (marks[id].note || '') === note) return;
+    marks[id] = { redo: true, note };
+    try { await db.doc(`marks/${id}`).set({ redo: true, note, at: new Date().toISOString() }); setStatus('Note saved.'); }
+    catch (e) { setStatus(`The note was not saved (${e && e.code ? e.code : 'error'}).`); }
+  }
+
+  (async () => {
+    setStatus('Loading your marks…');
+    try { db = window.claude && window.claude.use ? await window.claude.use('db') : null; } catch { db = null; }
+    if (!db) { setStatus('Marks can’t be saved in this view. Open the page signed in to claude.ai to mark logos.'); refresh(); return; }
+    const slow = setTimeout(() => setStatus('Your marks are taking a while to load. You can keep looking meanwhile.'), 10000);
+    db.collection('marks').onSnapshot((snap) => {
+      clearTimeout(slow);
+      const next = {};
+      for (const d of snap.docs) { const v = d.data(); if (v && v.redo) next[d.id] = { redo: true, note: typeof v.note === 'string' ? v.note : '' }; }
+      marks = next;
+      const n = Object.keys(marks).length;
+      setStatus(n ? `${plural(n, 'logo', 'logos')} marked for redo.` : 'No logos marked yet.');
+      refresh();
+    }, (e) => { clearTimeout(slow); setStatus(`Marks could not load (${e.code}). The page still works for looking.`); });
+    refresh();
+  })();
+
+  // ---- full-size view
+  const zoom = $('zoom');
+  function openZoom(item) {
+    $('zoom-title').textContent = item.title;
+    for (const k of ['zoom-a', 'zoom-b', 'zoom-c']) $(k).src = `logos/${item.id}.webp`;
+    if (zoom.showModal) zoom.showModal(); else zoom.setAttribute('open', '');
+  }
+  $('zoom-close').addEventListener('click', () => zoom.close ? zoom.close() : zoom.removeAttribute('open'));
+  zoom.addEventListener('click', (e) => { if (e.target === zoom) zoom.close(); });
+
+  // ---- series without a logo
+  const m = $('missing');
+  m.innerHTML = `<h2>No logo yet</h2><p>These keep the styled text title. Each has the reason it has no entry.</p>`;
+  const ul = document.createElement('ul');
+  for (const x of DATA.missing) {
+    const li = document.createElement('li');
+    li.innerHTML = '<b></b><span></span>';
+    li.querySelector('b').textContent = x.title;
+    li.querySelector('span').textContent = x.why;
+    ul.append(li);
+  }
+  m.append(ul);
+  if (DATA.unlinked.length) {
+    const h = document.createElement('p');
+    h.textContent = `${plural(DATA.unlinked.length, 'series has', 'series have')} no checked AniList link on your server, and the library is keyed by AniList id, so they can't have an entry until one is linked:`;
+    const list = document.createElement('ul');
+    list.className = 'unlinked';
+    for (const t of DATA.unlinked) { const li = document.createElement('li'); li.textContent = t; list.append(li); }
+    m.append(h, list);
+  }
+  refresh();
+})();
+</script>
